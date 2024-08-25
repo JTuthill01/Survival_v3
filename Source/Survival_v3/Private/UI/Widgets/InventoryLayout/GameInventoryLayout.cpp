@@ -33,10 +33,3 @@ void UGameInventoryLayout::OnWidgetDeactivated()
 		IPlayerControllerInterface::Execute_CloseInventory(PC);
 }
 
-UWidget* UGameInventoryLayout::NativeGetDesiredFocusTarget() const
-{
-	Super::NativeGetDesiredFocusTarget();
-	
-	return WBP_Inventory->CommonButton01;
-}
-

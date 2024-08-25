@@ -31,7 +31,4 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UCommonButton> WBP_CommonButton;
-
-protected:
-	virtual UWidget* NativeGetDesiredFocusTarget() const override;
 };
