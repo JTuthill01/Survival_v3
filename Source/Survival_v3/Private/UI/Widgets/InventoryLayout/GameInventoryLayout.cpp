@@ -1,5 +1,6 @@
 #include "UI/Widgets/InventoryLayout/GameInventoryLayout.h"
 #include "UI/Common/CommonButton/CommonButton.h"
+#include "UI/Widgets/Inventory/InventoryWidget.h"
 #include "Character/Controller/PlayerCharacterController.h"
 #include "Components/TextBlock.h"
 
@@ -30,5 +31,12 @@ void UGameInventoryLayout::OnWidgetDeactivated()
 {
 	if (IsValid(PC))
 		IPlayerControllerInterface::Execute_CloseInventory(PC);
+}
+
+UWidget* UGameInventoryLayout::NativeGetDesiredFocusTarget() const
+{
+	Super::NativeGetDesiredFocusTarget();
+	
+	return WBP_Inventory->CommonButton01;
 }
 
