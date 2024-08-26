@@ -23,3 +23,4 @@ struct FItemRecipeStruct
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> ItemIcon;
 };
+
