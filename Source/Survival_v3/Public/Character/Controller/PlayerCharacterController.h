@@ -5,6 +5,7 @@
 #include "InputActionValue.h"
 #include "Enums/EquippableState/EquippableState.h"
 #include "Interfaces/Character/Controller/PlayerControllerInterface.h"
+#include "Structs/Recipes/ItemRecipes.h"
 #include "PlayerCharacterController.generated.h"
 
 struct FStreamableHandle;
@@ -29,6 +30,9 @@ public:
 	virtual void ResetItemSlot_Implementation(const EContainerType Container, const int32 Index) override;
 
 	virtual void ShowItemCollected_Implementation(UTexture2D* InIcon, const int32 InResourceQuantity, const FText& InResourceName) override;
+
+	virtual void SetupCraftableItems_Implementation(ECraftingType InCraftingType, TArray<FSimpleItemStruct>& Item) override;
+
 #pragma endregion
 
 protected:

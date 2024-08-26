@@ -49,6 +49,8 @@ public:
 	virtual void FirstPersonMontage_Implementation(UAnimMontage* InMontage, AHatchetMaster* EquipableItem) override;
 
 	virtual void HarvestItem_Implementation(FItemsStruct Resource) override;
+
+	virtual void GetEndGramsAndItems_Implementation(ECraftingType InType) override;
 #pragma endregion
 
 	void InteractWithObject();

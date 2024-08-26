@@ -4,6 +4,7 @@
 #include "UObject/Interface.h"
 #include "Enums/ItemEnums/ItemEnums.h"
 #include "Structs/ItemsStructs/ItemStruct.h"
+#include "Structs/Recipes/ItemRecipes.h"
 #include "PlayerCharacterInterface.generated.h"
 
 // This class does not need to be modified.
@@ -39,4 +40,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void HarvestItem(FItemsStruct Resource);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void GetEndGramsAndItems(ECraftingType InType);
 };

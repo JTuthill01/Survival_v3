@@ -19,7 +19,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
+#pragma region Virtual Functions
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
@@ -29,7 +30,9 @@ public:
 	virtual bool AddItemsToIndex(const FItemsStruct& ItemInfo, const int32 LocalSpecificIndex, const int32 LocalItemIndex);
 
 	virtual bool RemoveItemAtIndex(const int32 IndexToRemove);
+#pragma endregion
 
+#pragma region Functions
 	void OnSlotDrop(const TObjectPtr<UItemsContainerMaster>& FromContainer, const int32 FromIndex, const int32 DroppedIndex);
 
 	void FindEmptySlot(int32& LocalEmptySlotIndex, bool& bFoundEmptySlot);
@@ -38,9 +41,12 @@ public:
 	
 	void TransferItem(const TObjectPtr<UItemsContainerMaster>& ToComponent, const int32 ToIndex, const int32 ItemIndexToTransfer);
 
+	TArray<FSimpleItemStruct> GetItemQuantities();
+
 	FItemsStruct GetItemAtIndex(const int32 Index);
 	
 	bool IsSlotEmpty(const int32 SlotIndex);
+#pragma endregion
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Structs")
 	TArray<FItemsStruct> Items;

@@ -70,6 +70,11 @@ void APlayerCharacterController::ShowItemCollected_Implementation(UTexture2D* In
 	RootLayout->DefaultHUDLayout->GetItemCollectedWidget()->OnResourceTextBlockChange.Broadcast(InResourceQuantity, InResourceName);
 }
 
+void APlayerCharacterController::SetupCraftableItems_Implementation(ECraftingType InCraftingType, TArray<FSimpleItemStruct>& Item)
+{
+	
+}
+
 UInventorySlot* APlayerCharacterController::GetInventoryWidget(EContainerType Container, int32 SlotIndex) const
 {
 	TObjectPtr<UInventorySlot> LocalSlot;

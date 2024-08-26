@@ -157,6 +157,42 @@ void APlayerCharacter::HarvestItem_Implementation(FItemsStruct Resource)
 	}
 }
 
+void APlayerCharacter::GetEndGramsAndItems_Implementation(ECraftingType InType)
+{
+	switch (InType)
+	{
+	case ECraftingType::ECT_PlayerInventory:
+		
+		if (const TObjectPtr<APlayerCharacterController> PC = Cast<APlayerCharacterController>(GetController()); IsValid(PC))
+		{
+			//IPlayerControllerInterface::Execute_SetupCraftableItems(PC, InType, PlayerInventory->GetItemQuantities());
+		}
+		
+		break;
+		
+	case ECraftingType::ECT_CookingPot:
+		break;
+		
+	case ECraftingType::ECT_CraftingBench:
+		break;
+		
+	case ECraftingType::ECT_SmeltingForge:
+		break;
+		
+	case ECraftingType::ECT_AdvancedWorkbench:
+		break;
+		
+	case ECraftingType::ECT_StorageBox:
+		break;
+		
+	case ECraftingType::ECT_CropPlot:
+		break;
+
+	default:
+		break;
+	}
+}
+
 void APlayerCharacter::OnPlayerMontageComplete()
 {
 	MontageTimer = 0.0;

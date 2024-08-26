@@ -4,6 +4,7 @@
 #include "UObject/Interface.h"
 #include "Enums/ItemEnums/ItemEnums.h"
 #include "Structs/ItemsStructs/ItemStruct.h"
+#include "Structs/Recipes/ItemRecipes.h"
 #include "PlayerControllerInterface.generated.h"
 
 // This class does not need to be modified.
@@ -30,4 +31,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShowItemCollected(UTexture2D* InIcon, const int32 InResourceQuantity, const FText& InResourceName);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetupCraftableItems(ECraftingType InCraftingType, TArray<FSimpleItemStruct>& Item);
 };

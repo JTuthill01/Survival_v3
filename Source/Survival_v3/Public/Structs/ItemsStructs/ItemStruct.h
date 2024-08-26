@@ -36,3 +36,19 @@ struct FItemsStruct
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSoftObjectPtr<class UItemInfo> ItemAsset = nullptr;
 };
+
+USTRUCT(BlueprintType)
+struct FSimpleItemStruct
+{
+	GENERATED_BODY()
+
+	FSimpleItemStruct() : ItemID(0), ItemQuantity(0)
+	{
+	}
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 ItemID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 ItemQuantity;
+};

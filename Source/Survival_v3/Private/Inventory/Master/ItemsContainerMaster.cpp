@@ -165,6 +165,45 @@ void UItemsContainerMaster::TransferItem(const TObjectPtr<UItemsContainerMaster>
 	}
 }
 
+TArray<FSimpleItemStruct> UItemsContainerMaster::GetItemQuantities()
+{
+	TArray<FSimpleItemStruct> LocalItemArray;
+
+	bool bFoundItem = false;
+	
+	for (int32 i = 0; i < Items.Num(); ++i)
+	{
+		if (Items[i].ItemID != 0)
+		{
+			for (int32 j = 0; j < LocalItemArray.Num(); ++j)
+			{
+				if (LocalItemArray[j].ItemID == Items[i].ItemID)
+				{
+					bFoundItem = true;
+
+					int32 LocalNewQuantity = Items[i].ItemQuantity + LocalItemArray[j].ItemQuantity;
+
+					LocalItemArray[j].ItemQuantity = LocalNewQuantity;
+				}
+			}
+
+			if (bFoundItem)
+				bFoundItem = false;
+
+			else
+			{
+				FSimpleItemStruct FoundItems = FSimpleItemStruct();
+				FoundItems.ItemID = Items[i].ItemID;
+				FoundItems.ItemQuantity = Items[i].ItemQuantity;
+				
+				LocalItemArray.Emplace(FoundItems);
+			}
+		}
+	}
+
+	return LocalItemArray;
+}
+
 FItemsStruct UItemsContainerMaster::GetItemAtIndex(const int32 Index)
 {
 	if (Items.IsValidIndex(Index))
