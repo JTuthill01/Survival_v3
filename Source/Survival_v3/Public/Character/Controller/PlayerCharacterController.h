@@ -23,6 +23,8 @@ public:
 	virtual void SetupInputComponent() override;
 
 #pragma region Interface Functions
+	virtual APlayerCharacterController* GetPlayerCharacterControllerRef_Implementation() override;
+	
 	virtual void CloseInventory_Implementation() override;
 
 	virtual void UpdateItemSlot_Implementation(EContainerType InType, int32 Index, const FItemsStruct& ItemInfo) override;
@@ -31,10 +33,10 @@ public:
 
 	virtual void ShowItemCollected_Implementation(UTexture2D* InIcon, const int32 InResourceQuantity, const FText& InResourceName) override;
 
-	virtual void SetupCraftableItems_Implementation(ECraftingType InCraftingType, TArray<FSimpleItemStruct>& Item) override;
-
 #pragma endregion
 
+	void SetupCraftableItem(ECraftingType InCraftingType, const TArray<FSimpleItemStruct>& Item);
+	
 protected:
 
 	virtual void BeginPlay() override;

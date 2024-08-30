@@ -15,10 +15,13 @@ public:
 	UCraftingSlot(const FObjectInitializer& Object);
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UImage> ItemIcon;
+	TObjectPtr<class UImage> ItemIconImage;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UBorder> CraftingBackground;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	TObjectPtr<UTexture2D> ItemIcon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TObjectPtr<UTexture2D> ImageTexture;
@@ -28,6 +31,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int32 ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 ItemIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	EContainerType ContainerType;

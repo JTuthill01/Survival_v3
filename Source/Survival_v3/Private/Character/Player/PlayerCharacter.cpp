@@ -165,7 +165,7 @@ void APlayerCharacter::GetEndGramsAndItems_Implementation(ECraftingType InType)
 		
 		if (const TObjectPtr<APlayerCharacterController> PC = Cast<APlayerCharacterController>(GetController()); IsValid(PC))
 		{
-			//IPlayerControllerInterface::Execute_SetupCraftableItems(PC, InType, PlayerInventory->GetItemQuantities());
+			PC->SetupCraftableItem(InType, PlayerInventory->GetItemQuantities());
 		}
 		
 		break;

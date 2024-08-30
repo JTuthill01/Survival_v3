@@ -70,9 +70,9 @@ void APlayerCharacterController::ShowItemCollected_Implementation(UTexture2D* In
 	RootLayout->DefaultHUDLayout->GetItemCollectedWidget()->OnResourceTextBlockChange.Broadcast(InResourceQuantity, InResourceName);
 }
 
-void APlayerCharacterController::SetupCraftableItems_Implementation(ECraftingType InCraftingType, TArray<FSimpleItemStruct>& Item)
+void APlayerCharacterController::SetupCraftableItem(ECraftingType InCraftingType, const TArray<FSimpleItemStruct>& Item)
 {
-	
+	RootLayout->GameInventoryLayout->UpdateCraftWidget(InCraftingType, Item);
 }
 
 UInventorySlot* APlayerCharacterController::GetInventoryWidget(EContainerType Container, int32 SlotIndex) const
@@ -89,6 +89,7 @@ UInventorySlot* APlayerCharacterController::GetInventoryWidget(EContainerType Co
 		break;
 		
 	case EContainerType::ECT_HotBar:
+		
 		if (IsValid(RootLayout))
 			LocalSlot = RootLayout->DefaultHUDLayout->WBP_Hotbar->ItemContainerGrid->GetSlots()[SlotIndex];
 		
@@ -246,7 +247,7 @@ void APlayerCharacterController::OnHotBar(const FInputActionValue& Value, int32 
 
 						if (auto&& Item = LocalItem.ItemAsset.LoadSynchronous(); IsValid(Item))
 						{
-							if (TSubclassOf<AItemMaster> ItemClassRef = Item->ItemClassRef.LoadSynchronous(); IsValid(ItemClassRef))
+							if (const TSubclassOf<AItemMaster> ItemClassRef = Item->ItemClassRef.LoadSynchronous(); IsValid(ItemClassRef))
 								SpawnEquipableItem(ItemClassRef, Index);
 						}
 					}
@@ -342,6 +343,8 @@ void APlayerCharacterController::DebugKey()
 	if (IsValid(PlayerRef))
 		PlayerRef->InventoryDebug();
 }
+
+APlayerCharacterController* APlayerCharacterController::GetPlayerCharacterControllerRef_Implementation(){ return this; }
 
 void APlayerCharacterController::Jump() { GetCharacter()->Jump(); }
 

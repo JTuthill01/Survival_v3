@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Enums/ItemEnums/ItemEnums.h"
+#include "Structs/Crafting/ItemRecipeStruct.h"
+#include "Structs/ItemsStructs/ItemStruct.h"
 #include "Structs/Recipes/ItemRecipes.h"
 #include "CraftingContainer.generated.h"
 
@@ -14,6 +16,14 @@ class SURVIVAL_V3_API UCraftingContainer : public UUserWidget
 public:
 	UCraftingContainer(const FObjectInitializer& Object);
 
+	void InitSlots();
+
+	void UpdateSlots(ECraftingType InType, const TArray<FSimpleItemStruct>& InItemArray);
+
+	void AddSlots(ECraftingType CType, const TArray<FSimpleItemStruct>& ItemArray, bool AdminMode = false);
+
+	void AddSlotsToGrid(int32 Index, class UCraftingSlot* CSlot);
+	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UUniformGridPanel> Grid;
 
@@ -23,5 +33,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	ECraftingType CraftingType;
 
-	void InitSlots();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	TArray<class UCraftingSlot*> Slots;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Crafting")
+	TObjectPtr<UCraftingSlot> CraftSlot;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Subclass")
+	TSubclassOf<UCraftingSlot> CraftingSlotSubclass;
+
+private:
+	FName GetPathName(ECraftingType CurrentType);
+
+	TArray<FItemRecipeInfo> CheckIfCraftable(TArray<FItemRecipeStruct> RequiredItems, TArray<FSimpleItemStruct> ItemArray, bool& CanCraft);
 };

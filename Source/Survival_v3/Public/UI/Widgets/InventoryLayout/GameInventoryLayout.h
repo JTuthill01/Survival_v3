@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "CommonActivatableWidget.h"
+#include "Structs/ItemsStructs/ItemStruct.h"
+#include "Structs/Recipes/ItemRecipes.h"
 #include "GameInventoryLayout.generated.h"
 
 class UWidgetSwitcher;
@@ -19,6 +21,8 @@ public:
 
 	UFUNCTION()
 	void OnWidgetDeactivated();
+
+	void UpdateCraftWidget(ECraftingType InType, const TArray<FSimpleItemStruct>& ItemStruct);
 
 	UPROPERTY()
 	TObjectPtr<class APlayerCharacterController> PC;

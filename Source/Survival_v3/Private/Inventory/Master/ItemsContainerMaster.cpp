@@ -106,15 +106,20 @@ void UItemsContainerMaster::AddItem(FItemsStruct Item, bool AddSplitItem)
 
 						UpdateUI(LocalEmptyIndex, LocalItemInfo);
 
-						if (TotalItemQuantity = CalcTotalItemQuantity(TempSlotQuantity, TotalItemQuantity, MaxStackSize, CurrentSlotQuantity); TotalItemQuantity > 0)
+						TotalItemQuantity = CalcTotalItemQuantity(TempSlotQuantity, TotalItemQuantity, MaxStackSize, CurrentSlotQuantity);
+						
+						while (TotalItemQuantity > 0)
 						{
 							TotalItemQuantity = LocalItemInfo.ItemQuantity;
+							
 							MaxStackSize = LocalItemInfo.StackSize;
 							
 							FindEmptySlot(LocalEmptyIndex, bWasSlotFound);
 
 							if (bWasSlotFound)
 							{
+								int32 AddableQuantity = FMath::Min(TotalItemQuantity, MaxStackSize);
+								
 								CurrentSlotQuantity = NULL;
 
 								TempSlotQuantity = NULL;
@@ -126,7 +131,12 @@ void UItemsContainerMaster::AddItem(FItemsStruct Item, bool AddSplitItem)
 								Items[LocalEmptyIndex] = LocalItemInfo;
 
 								UpdateUI(LocalEmptyIndex, LocalItemInfo);
+
+								TotalItemQuantity -= AddableQuantity;
 							}
+
+							else
+								break;
 						}
 					}
 				}

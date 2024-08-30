@@ -20,4 +20,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UCommonButton> CommonButton02;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UWidgetSwitcher> InventorySwitcher;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UCraftingContainer> CraftingContainer;
 };
