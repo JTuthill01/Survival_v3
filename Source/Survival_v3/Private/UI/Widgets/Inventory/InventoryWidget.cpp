@@ -1,18 +1,47 @@
 #include "UI/Widgets/Inventory/InventoryWidget.h"
 #include "UI/Common/CommonButton/CommonButton.h"
+#include "UI/Widgets/Crafting/Container/CraftingContainer.h"
+#include "Components/WidgetSwitcher.h"
+
 
 void UInventoryWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if (IsValid(CommonButton01) && IsValid(CommonButton02))
+	if (IsValid(InventoryTabButton) && IsValid(CraftingTabButton))
 	{
-		CommonButton01->bUseText = true;
+		InventoryTabButton->bUseText = true;
 
-		CommonButton02->bUseText = true;
+		CraftingTabButton->bUseText = true;
 		
-		CommonButton01->SetButtonText(FText::FromString("Inventory"));
+		InventoryTabButton->SetButtonText(FText::FromString("Inventory"));
 
-		CommonButton02->SetButtonText(FText::FromString("Crafting"));
+		CraftingTabButton->SetButtonText(FText::FromString("Crafting"));
+
+		InventoryTabButton->OnClicked().AddUObject(this, &ThisClass::OnInventoryTabButtonClicked);
+
+		CraftingTabButton->OnClicked().AddUObject(this, &ThisClass::OnCraftingTabButtonClicked);
+	}
+}
+
+void UInventoryWidget::ResetCraftingWindow()
+{
+	if (IsValid(InventorySwitcher))
+		InventorySwitcher->SetActiveWidgetIndex(0);
+}
+
+void UInventoryWidget::OnInventoryTabButtonClicked()
+{
+	if (IsValid(InventorySwitcher))
+		InventorySwitcher->SetActiveWidgetIndex(0);
+}
+
+void UInventoryWidget::OnCraftingTabButtonClicked()
+{
+	if (IsValid(InventorySwitcher) && IsValid(CraftingContainer))
+	{
+		InventorySwitcher->SetActiveWidgetIndex(1);
+
+		CraftingContainer->InitSlots();
 	}
 }

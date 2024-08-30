@@ -34,7 +34,10 @@ public:
 	ECraftingType CraftingType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TArray<class UCraftingSlot*> Slots;
+	TArray<UCraftingSlot*> Slots;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 SlotsPerRow;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Crafting")

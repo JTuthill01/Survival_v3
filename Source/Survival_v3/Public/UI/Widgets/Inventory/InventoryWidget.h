@@ -11,15 +11,23 @@ class SURVIVAL_V3_API UInventoryWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+
+	void ResetCraftingWindow();
+
+	UFUNCTION()
+	void OnInventoryTabButtonClicked();
+
+	UFUNCTION()
+	void OnCraftingTabButtonClicked();
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UItemContainerGrid> WBP_ItemContainerGrid;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UCommonButton> CommonButton01;
+	TObjectPtr<class UCommonButton> InventoryTabButton;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UCommonButton> CommonButton02;
+	TObjectPtr<UCommonButton> CraftingTabButton;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UWidgetSwitcher> InventorySwitcher;

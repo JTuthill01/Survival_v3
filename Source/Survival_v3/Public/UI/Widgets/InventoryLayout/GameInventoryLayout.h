@@ -16,6 +16,8 @@ class SURVIVAL_V3_API UGameInventoryLayout : public UCommonActivatableWidget
 public:
 	virtual void NativeConstruct() override;
 
+	virtual void NativeOnActivated() override;
+
 	UFUNCTION()
 	void OnCloseClicked();
 

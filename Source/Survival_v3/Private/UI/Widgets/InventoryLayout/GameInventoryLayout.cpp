@@ -23,6 +23,14 @@ void UGameInventoryLayout::NativeConstruct()
 	OnDeactivated().AddUObject(this, &ThisClass::OnWidgetDeactivated);
 }
 
+void UGameInventoryLayout::NativeOnActivated()
+{
+	Super::NativeOnActivated();
+
+	if (IsValid(WBP_Inventory))
+		WBP_Inventory->ResetCraftingWindow();
+}
+
 void UGameInventoryLayout::OnCloseClicked()
 {
 	DeactivateWidget();

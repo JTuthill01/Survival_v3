@@ -14,6 +14,9 @@ class SURVIVAL_V3_API UCraftingSlot : public UCommonButtonBase
 public:
 	UCraftingSlot(const FObjectInitializer& Object);
 
+	virtual void NativeConstruct() override;
+	
+#pragma region Variables_Bindings
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UImage> ItemIconImage;
 
@@ -49,4 +52,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TSoftObjectPtr<UObject> RecipeAsset;
+#pragma endregion
 };

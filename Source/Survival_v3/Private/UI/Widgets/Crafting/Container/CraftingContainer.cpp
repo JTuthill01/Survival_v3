@@ -6,8 +6,9 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
+#include "Kismet/KismetMathLibrary.h"
 
-UCraftingContainer::UCraftingContainer(const FObjectInitializer& Object) : Super(Object), ContainerType(EContainerType::ECT_Inventory), CraftingType(ECraftingType::ECT_PlayerInventory)
+UCraftingContainer::UCraftingContainer(const FObjectInitializer& Object) : Super(Object), ContainerType(EContainerType::ECT_Inventory), CraftingType(ECraftingType::ECT_PlayerInventory), SlotsPerRow(6)
 {
 }
 
@@ -62,6 +63,8 @@ void UCraftingContainer::AddSlots(ECraftingType CType, const TArray<FSimpleItemS
 							CraftSlot->RecipeAsset = LocalItemRecipe->ItemAsset;
 
 							CraftSlot->ItemIndex = Slots.Emplace(CraftSlot);
+
+							AddSlotsToGrid(CraftSlot->ItemIndex, CraftSlot);
 						}
 					}
 				}
@@ -121,9 +124,17 @@ void UCraftingContainer::AddSlotsToGrid(int32 Index, class UCraftingSlot* CSlot)
 	{
 		if (auto&& Panel = Grid->AddChildToUniformGrid(CSlot); IsValid(Panel))
 		{
+			const double InRowDouble = LocalSlotIndex / SlotsPerRow;
+
+			const int32 InRowInt = UKismetMathLibrary::FTrunc(InRowDouble);
 			
+			Panel->SetRow(InRowInt);
+
+			double Remainder;
+
+			UKismetMathLibrary::FMod(LocalSlotIndex, SlotsPerRow, Remainder);
 			
-			Panel->SetRow(0);
+			Panel->SetColumn(UKismetMathLibrary::FTrunc(Remainder));
 		}
 	}
 }
