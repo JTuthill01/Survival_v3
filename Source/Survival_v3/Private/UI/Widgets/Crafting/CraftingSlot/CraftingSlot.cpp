@@ -16,11 +16,11 @@ void UCraftingSlot::NativeConstruct()
 	{
 		ItemIconImage->SetBrushFromTexture(ItemIcon);
 
-		if (!bCanCraftItem )
+		if (bCanCraftItem)
 		{
-			FSlateColor IconTint = FSlateColor(FColor::White);
+			FSlateColor IconTint = FSlateColor(FColor::FromHex("#4D4D4F"));
 
-			FLinearColor CraftingBackgroundColor = FLinearColor(0.77, 0.77, 0.79, 1.0);
+			FLinearColor CraftingBackgroundColor = FLinearColor(1.0, 1.0, 1.0, 0.5);
 			
 			ItemIconImage->SetBrushTintColor(IconTint);
 
@@ -29,10 +29,10 @@ void UCraftingSlot::NativeConstruct()
 
 		else
 		{
-			FSlateColor IconTint = FSlateColor(FColor::FromHex("#4D4D4F"));
+			FSlateColor IconTint = FSlateColor(FColor::White);
 
-			FLinearColor CraftingBackgroundColor = FLinearColor(1.0, 1.0, 1.0, 0.5);
-			
+			FLinearColor CraftingBackgroundColor = FLinearColor(0.77, 0.77, 0.79, 1.0);
+
 			ItemIconImage->SetBrushTintColor(IconTint);
 
 			CraftingBackground->SetBrushColor(CraftingBackgroundColor);
