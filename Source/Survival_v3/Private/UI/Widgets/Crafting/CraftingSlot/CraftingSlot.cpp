@@ -39,3 +39,13 @@ void UCraftingSlot::NativeConstruct()
 		}
 	}
 }
+
+void UCraftingSlot::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+}
+
+void UCraftingSlot::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseLeave(InMouseEvent);
+}

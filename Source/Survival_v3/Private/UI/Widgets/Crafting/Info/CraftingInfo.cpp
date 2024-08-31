@@ -1,8 +1,9 @@
 #include "UI/Widgets/Crafting/Info/CraftingInfo.h"
-
+#include "UI/Widgets/Crafting/Item/CraftItemWidget.h"
+#include "DataAssets/Primairy/ItemInfo.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "DataAssets/Primairy/ItemInfo.h"
+#include "Components/VerticalBox.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 
@@ -30,6 +31,27 @@ void UCraftingInfo::OnLoadFinished()
 
 		ItemDescriptionText->SetText(LocalInfo->ItemDescription);
 
-		ItemIcon->SetBrushFromTexture(LocalInfo->ItemIcon);
+		ItemIcon->SetBrushFromTexture(ImageIcon);
+
+		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
+
+		for (int32 i = 0; i < RequiredItems.Num(); ++i)
+		{
+			TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(RequiredItems[i].ItemIcon.ToSoftObjectPath(),
+				FStreamableDelegate::CreateUObject(this, &ThisClass::OnItemIconLoadFinished, RequiredItems[i]));
+		}
+	}
+}
+
+void UCraftingInfo::OnItemIconLoadFinished(FItemRecipeInfo Info)
+{
+	if(CraftItem = CreateWidget<UCraftItemWidget>(this, CraftItemClassRef); IsValid(CraftItem))
+	{
+		CraftItem->ItemImage = Info.ItemIcon.Get();
+		CraftItem->ItemName = Info.ItemName;
+		CraftItem->NeededQuantity = Info.NeededQuantity;
+		CraftItem->CurrentQuantity =  Info.CurrentQuantity;
+
+		RequiredItemsBox->AddChild(CraftItem);
 	}
 }

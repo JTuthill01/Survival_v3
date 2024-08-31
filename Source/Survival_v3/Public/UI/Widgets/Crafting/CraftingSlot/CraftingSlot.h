@@ -15,6 +15,10 @@ public:
 	UCraftingSlot(const FObjectInitializer& Object);
 
 	virtual void NativeConstruct() override;
+
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
+	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
 	
 #pragma region Variables_Bindings
 	UPROPERTY(meta = (BindWidget))

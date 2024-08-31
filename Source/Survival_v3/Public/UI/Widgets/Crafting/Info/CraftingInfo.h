@@ -15,6 +15,9 @@ public:
 
 	void InitializeWidget();
 
+	UPROPERTY()
+	TObjectPtr<class UCraftItemWidget> CraftItem;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UImage> ItemIcon;
 
@@ -34,6 +37,9 @@ public:
 	TObjectPtr<UTexture2D> ImageIcon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	TSubclassOf<UCraftItemWidget> CraftItemClassRef;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TArray<FItemRecipeInfo> RequiredItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
@@ -41,4 +47,6 @@ public:
 
 private:
 	void OnLoadFinished();
+
+	void OnItemIconLoadFinished(FItemRecipeInfo Info);
 };

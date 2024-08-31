@@ -183,8 +183,8 @@ TArray<FItemRecipeInfo> UCraftingContainer::CheckIfCraftable(TArray<FItemRecipeS
 
 	TArray<FItemRecipeInfo> LocalItemsInInventory;
 
-	bool bDoesNotContainItem;
-	bool bIsFound;
+	bool bDoesNotContainItem = false;
+	bool bIsFound = false;
 	
 	for (int32 i = 0; i < RequiredItems.Num(); ++i)
 	{
