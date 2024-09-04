@@ -55,6 +55,9 @@ public:
 	TArray<FItemRecipeInfo> RequiredItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TSoftObjectPtr<UObject> RecipeAsset;
+	TSoftObjectPtr<class UItemRecipe> RecipeAsset;
 #pragma endregion
+
+private:
+	bool bShowTooltip;
 };

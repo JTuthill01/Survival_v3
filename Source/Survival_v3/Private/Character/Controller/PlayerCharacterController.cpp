@@ -75,6 +75,15 @@ void APlayerCharacterController::SetupCraftableItem(ECraftingType InCraftingType
 	RootLayout->GameInventoryLayout->UpdateCraftWidget(InCraftingType, Item);
 }
 
+void APlayerCharacterController::ShowCraftItemTooltip(const TObjectPtr<UTexture2D>& ItemIcon, const FText& ItemName, TArray<FItemRecipeInfo> RequiredItems, TSoftObjectPtr<UItemRecipe> ItemAsset)
+{
+	if (IsValid(RootLayout))
+	{
+		if (IsValid(RootLayout->GameInventoryLayout))
+			RootLayout->GameInventoryLayout->ShowCraftTooltip(ItemIcon,RequiredItems, ItemName, ItemAsset);
+	}
+}
+
 UInventorySlot* APlayerCharacterController::GetInventoryWidget(EContainerType Container, int32 SlotIndex) const
 {
 	TObjectPtr<UInventorySlot> LocalSlot;
@@ -349,6 +358,9 @@ APlayerCharacterController* APlayerCharacterController::GetPlayerCharacterContro
 void APlayerCharacterController::Jump() { GetCharacter()->Jump(); }
 
 void APlayerCharacterController::StopJump() { GetCharacter()->StopJumping(); }
+
+void APlayerCharacterController::HideCraftItemToolTip_Implementation() { RootLayout->GameInventoryLayout->GameInventoryHideCraftItemToolTip(); }
+
 
 
 

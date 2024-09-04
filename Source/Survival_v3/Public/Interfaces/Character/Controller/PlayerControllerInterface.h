@@ -4,6 +4,7 @@
 #include "UObject/Interface.h"
 #include "Enums/ItemEnums/ItemEnums.h"
 #include "Structs/ItemsStructs/ItemStruct.h"
+#include "Structs/Recipes/ItemRecipes.h"
 #include "PlayerControllerInterface.generated.h"
 
 // This class does not need to be modified.
@@ -21,6 +22,9 @@ class SURVIVAL_V3_API IPlayerControllerInterface
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	void CloseInventory();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void HideCraftItemToolTip();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void UpdateItemSlot(EContainerType InType, int32 Index, const FItemsStruct& ItemInfo);

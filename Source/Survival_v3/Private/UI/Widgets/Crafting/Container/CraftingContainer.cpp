@@ -43,7 +43,7 @@ void UCraftingContainer::AddSlots(ECraftingType CType, const TArray<FSimpleItemS
 
 			if (TArray<FAssetData> AssetData; AssetRegistryModule.Get().GetAssetsByPath(GetPathName(CType), AssetData, true))
 			{
-				for (int i = 0; i < AssetData.Num(); ++i)
+				for (int32 i = 0; i < AssetData.Num(); ++i)
 				{
 					if (auto&& LocalItemRecipe = Cast<UItemRecipe>(AssetData[i].GetAsset()); IsValid(LocalItemRecipe))
 					{
@@ -60,7 +60,8 @@ void UCraftingContainer::AddSlots(ECraftingType CType, const TArray<FSimpleItemS
 							CraftSlot->ContainerType = ContainerType;
 							CraftSlot->RequiredItems = ReturnedItems;
 							CraftSlot->CraftingType = CraftingType;
-							CraftSlot->RecipeAsset = LocalItemRecipe->ItemAsset;
+							
+							CraftSlot->RecipeAsset = LocalItemRecipe;
 
 							CraftSlot->ItemIndex = Slots.Emplace(CraftSlot);
 
@@ -116,7 +117,7 @@ void UCraftingContainer::AddSlots(ECraftingType CType, const TArray<FSimpleItemS
 	}
 }
 
-void UCraftingContainer::AddSlotsToGrid(int32 Index, class UCraftingSlot* CSlot)
+void UCraftingContainer::AddSlotsToGrid(int32 Index, UCraftingSlot* CSlot)
 {
 	int32 LocalSlotIndex = Index;
 

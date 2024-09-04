@@ -24,10 +24,17 @@ public:
 	UFUNCTION()
 	void OnWidgetDeactivated();
 
-	void UpdateCraftWidget(ECraftingType InType, const TArray<FSimpleItemStruct>& ItemStruct);
+	void GameInventoryHideCraftItemToolTip() const;
+
+	void UpdateCraftWidget(ECraftingType InType, const TArray<FSimpleItemStruct>& ItemStruct) const;
+
+	void ShowCraftTooltip(UTexture2D* ItemIcon, TArray<FItemRecipeInfo> RequiredItems, const FText& ItemName, TSoftObjectPtr<class UItemRecipe> RecipeAsset);
 
 	UPROPERTY()
 	TObjectPtr<class APlayerCharacterController> PC;
+
+	UPROPERTY()
+	TObjectPtr<class UCraftingInfo> CraftToolTipRef;
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UWidgetSwitcher> InventoryWidgetSwitcher;
@@ -37,4 +44,9 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UCommonButton> WBP_CommonButton;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UCraftingInfo> CraftingInfoClassRef;
+
+	void OnAssetLoadedComplete(TArray<FItemRecipeInfo> RequiredItems, TSoftObjectPtr<UItemRecipe> RecipeAsset);
 };

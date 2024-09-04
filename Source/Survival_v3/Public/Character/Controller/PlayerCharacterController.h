@@ -27,6 +27,8 @@ public:
 	
 	virtual void CloseInventory_Implementation() override;
 
+	virtual void HideCraftItemToolTip_Implementation() override;
+
 	virtual void UpdateItemSlot_Implementation(EContainerType InType, int32 Index, const FItemsStruct& ItemInfo) override;
 
 	virtual void ResetItemSlot_Implementation(const EContainerType Container, const int32 Index) override;
@@ -36,6 +38,8 @@ public:
 #pragma endregion
 
 	void SetupCraftableItem(ECraftingType InCraftingType, const TArray<FSimpleItemStruct>& Item);
+
+	void ShowCraftItemTooltip(const TObjectPtr<UTexture2D>& ItemIcon, const FText& ItemName, TArray<FItemRecipeInfo> RequiredItems, TSoftObjectPtr<class UItemRecipe> ItemAsset);
 	
 protected:
 
