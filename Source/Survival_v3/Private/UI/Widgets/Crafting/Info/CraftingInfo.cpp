@@ -27,31 +27,24 @@ void UCraftingInfo::OnLoadFinished()
 		Args.Emplace(L"ItemType", FText::FromString(UEnum::GetValueAsString(LocalInfo->ItemType)));
 		Args.Emplace(L"Rarity", FText::FromString(UEnum::GetValueAsString(LocalInfo->ItemRarity)));
 	
-		ItemNameText->SetText(FText::Format(NSLOCTEXT("ITEM", "Item", "[{ItemName} / {ItemType} / {Rarity}]"), Args));
+		ItemNameText->SetText(FText::Format(NSLOCTEXT("ITEM", "Item", "{ItemName} / {ItemType} / {Rarity}"), Args));
 
 		ItemDescriptionText->SetText(LocalInfo->ItemDescription);
 
 		ItemIcon->SetBrushFromTexture(ImageIcon);
 
-		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
-
 		for (int32 i = 0; i < RequiredItems.Num(); ++i)
 		{
-			TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(RequiredItems[i].ItemIcon.ToSoftObjectPath(),
-				FStreamableDelegate::CreateUObject(this, &ThisClass::OnItemIconLoadFinished, RequiredItems[i]));
+			if(CraftItem = CreateWidget<UCraftItemWidget>(this, CraftItemClassRef); IsValid(CraftItem))
+			{
+				CraftItem->ItemImage = RequiredItems[i].ItemIcon;
+				CraftItem->ItemName = RequiredItems[i].ItemName;
+				CraftItem->NeededQuantity = RequiredItems[i].NeededQuantity;
+				CraftItem->CurrentQuantity = RequiredItems[i].CurrentQuantity;
+
+				RequiredItemsBox->AddChild(CraftItem);
+			}
 		}
 	}
 }
 
-void UCraftingInfo::OnItemIconLoadFinished(FItemRecipeInfo Info)
-{
-	if(CraftItem = CreateWidget<UCraftItemWidget>(this, CraftItemClassRef); IsValid(CraftItem))
-	{
-		CraftItem->ItemImage = Info.ItemIcon.Get();
-		CraftItem->ItemName = Info.ItemName;
-		CraftItem->NeededQuantity = Info.NeededQuantity;
-		CraftItem->CurrentQuantity =  Info.CurrentQuantity;
-
-		RequiredItemsBox->AddChild(CraftItem);
-	}
-}

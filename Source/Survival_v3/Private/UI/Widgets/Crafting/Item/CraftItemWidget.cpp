@@ -1,6 +1,8 @@
 ﻿#include "UI/Widgets/Crafting/Item/CraftItemWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Engine/AssetManager.h"
+#include "Engine/StreamableManager.h"
 
 UCraftItemWidget::UCraftItemWidget(const FObjectInitializer& Object) : Super(Object), ItemName(FText()), CurrentQuantity(0), NeededQuantity(0)
 {
@@ -10,8 +12,17 @@ void UCraftItemWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	ItemIcon->SetBrushFromTexture(ItemImage);
+	FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();	
 
+	TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(ItemImage.ToSoftObjectPath(),
+		FStreamableDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
+}
+
+void UCraftItemWidget::OnLoadFinished()
+{
+
+	ItemIcon->SetBrushFromTexture(ItemImage.Get());
+	
 	FFormatNamedArguments Args;
 	Args.Emplace("ItemName", ItemName);
 	Args.Emplace("CurrentQuantity", FText::AsNumber(CurrentQuantity));

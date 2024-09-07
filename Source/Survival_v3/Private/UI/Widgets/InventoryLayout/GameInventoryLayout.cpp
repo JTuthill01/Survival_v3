@@ -55,10 +55,10 @@ void UGameInventoryLayout::GameInventoryHideCraftItemToolTip() const
 
 void UGameInventoryLayout::ShowCraftTooltip(UTexture2D* ItemIcon, TArray<FItemRecipeInfo> RequiredItems, const FText& ItemName, TSoftObjectPtr<UItemRecipe> RecipeAsset)
 {
-	if (IsValid(CraftToolTipRef))
+	if(IsValid(CraftToolTipRef) && CraftToolTipRef->IsInViewport())
 		CraftToolTipRef->RemoveFromParent();
-
-	else if (!IsValid(CraftToolTipRef))
+	
+	else if (!IsValid(CraftToolTipRef) || !CraftToolTipRef->IsInViewport())
 	{
 		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
 
@@ -85,7 +85,7 @@ void UGameInventoryLayout::OnAssetLoadedComplete(TArray<FItemRecipeInfo> Require
 
 		CraftToolTipRef->AddToViewport(1);
 
-		auto&& MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(this);
+		auto&& MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(GetWorld());
 
 		double MousePosX = MousePosition.X + 10.0;
 		double MousePosY = MousePosition.Y + 10.0;

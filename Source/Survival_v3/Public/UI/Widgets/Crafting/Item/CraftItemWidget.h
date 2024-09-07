@@ -4,6 +4,9 @@
 #include "Blueprint/UserWidget.h"
 #include "CraftItemWidget.generated.h"
 
+class UImage;
+class UTextBlock;
+
 UCLASS()
 class SURVIVAL_V3_API UCraftItemWidget : public UUserWidget
 {
@@ -15,13 +18,13 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UImage> ItemIcon;
+	TObjectPtr<UImage> ItemIcon;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UTextBlock> ItemText;
+	TObjectPtr<UTextBlock> ItemText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TObjectPtr<UTexture2D> ItemImage;
+	TSoftObjectPtr<UTexture2D> ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	FText ItemName;
@@ -31,4 +34,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int32 NeededQuantity;
+
+private:
+	void OnLoadFinished();
 };

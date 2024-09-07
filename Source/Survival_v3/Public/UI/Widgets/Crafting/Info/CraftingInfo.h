@@ -47,6 +47,4 @@ public:
 
 private:
 	void OnLoadFinished();
-
-	void OnItemIconLoadFinished(FItemRecipeInfo Info);
 };
