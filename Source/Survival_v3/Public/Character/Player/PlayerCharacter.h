@@ -51,9 +51,13 @@ public:
 	virtual void HarvestItem_Implementation(FItemsStruct Resource) override;
 
 	virtual void GetEndGramsAndItems_Implementation(ECraftingType InType) override;
+
+	virtual void CraftItems(TSoftObjectPtr<UItemRecipe> Recipe, EContainerType ContainerType, ECraftingType CraftType) override;
 #pragma endregion
 
 	void InteractWithObject();
+
+	void CraftItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType);
 
 protected:
 	// Called when the game starts or when spawned
@@ -71,9 +75,13 @@ private:
 #pragma region Private Function
 	TObjectPtr<UItemsContainerMaster> SetContainerType(EContainerType InContainerType) const;
 
+	void CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType);
+
 	void OnPlayerMontageComplete();
 
 	void ScanForInteractable();
+
+	bool CheckIfCanCraftItem(int32 ID, EContainerType CraftContainerType, ECraftingType TableType);
 
 #pragma endregion
 

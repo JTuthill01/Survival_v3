@@ -1,5 +1,4 @@
 #include "UI/Widgets/Slot/InventorySlot.h"
-
 #include "Character/Player/PlayerCharacter.h"
 #include "UI/Widgets/Dragged/DraggedItem.h"
 #include "DataAssets/Primairy/ItemInfo.h"

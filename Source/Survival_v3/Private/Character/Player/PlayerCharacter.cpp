@@ -5,11 +5,12 @@
 #include "Inventory/Master/ItemsContainerMaster.h"
 #include "Items/Equippables/Tools/Hatchet/Master/HatchetMaster.h"
 #include "Enums/ItemEnums/ItemEnums.h"
-#include "Camera/CameraComponent.h"
 #include "DataAssets/Primairy/ItemInfo.h"
 #include "Interfaces/GroundItem/GroundItemInterface.h"
 #include "Interfaces/Interact/InteractInterface.h"
+#include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/AssetManager.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter() : EquippedState(EEquippableState::ES_Default), bIsUsingItem(false), bIsHarvesting(false), MontageTimer(0.0), InteractTimer(0.25)
@@ -193,6 +194,11 @@ void APlayerCharacter::GetEndGramsAndItems_Implementation(ECraftingType InType)
 	}
 }
 
+void APlayerCharacter::CraftItems(TSoftObjectPtr<UItemRecipe> Recipe, EContainerType ContainerType, ECraftingType CraftType)
+{
+	
+}
+
 void APlayerCharacter::OnPlayerMontageComplete()
 {
 	MontageTimer = 0.0;
@@ -233,6 +239,12 @@ void APlayerCharacter::ScanForInteractable()
 	
 	else
 		OnClearViewport.Broadcast();
+}
+
+bool APlayerCharacter::CheckIfCanCraftItem(int32 ID, EContainerType CraftContainerType, ECraftingType TableType)
+{
+
+	return false;
 }
 
 void APlayerCharacter::InteractWithObject()
@@ -287,6 +299,32 @@ void APlayerCharacter::InteractWithObject()
 
 		else
 			bIsHarvesting = false;
+	}
+}
+
+void APlayerCharacter::CraftItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType)
+{
+	if (bool bHasAdminMode = false; !bHasAdminMode)
+	{
+		if (bool bIsCrafting = false; !bIsCrafting)
+		{
+			bIsCrafting = true;
+
+			FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
+
+			FSoftObjectPath Path = RecipeAsset.ToSoftObjectPath();
+
+			TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(Path, FStreamableDelegate::CreateUObject(this, &ThisClass::CraftedItem,
+				RecipeAsset, Type, CraftType));
+		}
+	}
+}
+
+void APlayerCharacter::CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType)
+{
+	if (const TObjectPtr<UItemRecipe> Recipe = Cast<UItemRecipe>(RecipeAsset.Get()); IsValid(Recipe))
+	{
+		
 	}
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataAssets/Recipes/ItemRecipe.h"
 #include "UObject/Interface.h"
 #include "Enums/ItemEnums/ItemEnums.h"
 #include "Structs/ItemsStructs/ItemStruct.h"
@@ -43,4 +44,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void GetEndGramsAndItems(ECraftingType InType);
+	
+	virtual void CraftItems(TSoftObjectPtr<UItemRecipe> Recipe, EContainerType ContainerType, ECraftingType CraftType);
 };

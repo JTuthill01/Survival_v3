@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Structs/ItemsStructs/ItemStruct.h"
+#include "Structs/Crafting/ItemRecipeStruct.h"
 #include "Enums/ItemEnums/ItemEnums.h"
 #include "ItemsContainerMaster.generated.h"
 
@@ -41,11 +42,20 @@ public:
 	
 	void TransferItem(const TObjectPtr<UItemsContainerMaster>& ToComponent, const int32 ToIndex, const int32 ItemIndexToTransfer);
 
+	void ContainsItem(const TArray<FItemsStruct>& ContainsItems, bool& ReturnAnswer);
+
+	void CraftItem(TArray<FItemRecipeStruct>& Required);
+
 	TArray<FSimpleItemStruct> GetItemQuantities();
 
 	FItemsStruct GetItemAtIndex(const int32 Index);
 	
 	bool IsSlotEmpty(const int32 SlotIndex);
+
+	bool ContainsItem(TArray<FItemsStruct> ContainsItems);
+
+	bool CheckIfCraftable(TArray<FItemRecipeStruct> RequiredItems);
+	
 #pragma endregion
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Structs")
@@ -70,4 +80,6 @@ private:
 	int32 SetSlotQuantity(const int32 InSlotQuantity, const int32 InTotalItem, const int32 InMax);
 
 	int32 CalcTotalItemQuantity(const int32 InTemp, const int32 InItemQuan, const int32 InMaxSize, const int32 InCurrent);
+
+	int32 SetCraftingStructQuantity(const int32 CurrentQuantity, const int32 QuantityToRemove);
 };

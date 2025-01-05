@@ -1,4 +1,6 @@
 #include "UI/Widgets/Crafting/CraftingSlot/CraftingSlot.h"
+#include "Character/Player/PlayerCharacter.h"
+#include "Interfaces/Character/Player/PlayerCharacterInterface.h"
 #include "Character/Controller/PlayerCharacterController.h"
 #include "Components/Border.h"
 #include "Components/Image.h"
@@ -54,5 +56,16 @@ void UCraftingSlot::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 
 	if (const TObjectPtr<APlayerCharacterController> PC = Cast<APlayerCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)); IsValid(PC))
 		IPlayerControllerInterface::Execute_HideCraftItemToolTip(PC);
+}
+
+void UCraftingSlot::NativeOnPressed()
+{
+	Super::NativeOnPressed();
+
+	if (bCanCraftItem)
+	{
+		if (const TObjectPtr<APlayerCharacter> PlayerRef = IPlayerCharacterInterface::Execute_GetPlayerRef(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)); IsValid(PlayerRef))
+			PlayerRef->CraftItem(RecipeAsset, ContainerType, CraftingType);
+	}
 }
 

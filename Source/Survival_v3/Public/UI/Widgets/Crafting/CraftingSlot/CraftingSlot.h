@@ -19,6 +19,8 @@ public:
 	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
+
+	virtual void NativeOnPressed() override;
 	
 #pragma region Variables_Bindings
 	UPROPERTY(meta = (BindWidget))

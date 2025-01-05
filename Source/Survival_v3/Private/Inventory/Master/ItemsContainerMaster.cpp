@@ -1,6 +1,7 @@
 #include "Inventory/Master/ItemsContainerMaster.h"
 #include "Character/Player/PlayerCharacter.h"
 #include "DataAssets/Primairy/ItemInfo.h"
+#include "Structs/Crafting/CraftingStruct.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values for this component's properties
@@ -175,6 +176,75 @@ void UItemsContainerMaster::TransferItem(const TObjectPtr<UItemsContainerMaster>
 	}
 }
 
+bool UItemsContainerMaster::ContainsItem(TArray<FItemsStruct> ContainsItems)
+{
+	TArray<FItemsStruct> RequiredItems = ContainsItems;
+	
+	TArray<FItemsStruct> HasItems = ContainsItems;
+
+	for (int32 i = 0; i < RequiredItems.Num(); ++i)
+	{
+		int32 ID = RequiredItems[i].ItemID;
+
+		for (int32 j = 0; j < ContainsItems.Num(); ++j)
+		{
+			if (ID == ContainsItems[j].ItemID && ContainsItems[j].ItemQuantity >= RequiredItems[i].ItemQuantity)
+			{
+				for (int32 k = 0; k < HasItems.Num(); ++k)
+				{
+					if (ID == HasItems[k].ItemID)
+						HasItems.RemoveAt(k);
+				}
+			}
+		}
+	}
+
+	if (HasItems.IsEmpty())
+		return true;
+	
+	return false;
+}
+
+void UItemsContainerMaster::ContainsItem(const TArray<FItemsStruct>& ContainsItems, bool& ReturnAnswer)
+{
+	TArray<FItemsStruct> RequiredItems = ContainsItems;
+	
+	TArray<FItemsStruct> HasItems = ContainsItems;
+
+	for (int32 i = 0; i < RequiredItems.Num(); ++i)
+	{
+		const int32 ID = RequiredItems[i].ItemID;
+
+		for (int32 j = 0; j < ContainsItems.Num(); ++j)
+		{
+			if (ID == ContainsItems[j].ItemID && ContainsItems[j].ItemQuantity >= RequiredItems[i].ItemQuantity)
+			{
+				for (int32 k = 0; k < HasItems.Num(); ++k)
+				{
+					if (ID == HasItems[k].ItemID)
+						HasItems.RemoveAt(k);
+				}
+			}
+		}
+	}
+
+	if (HasItems.IsEmpty())
+		ReturnAnswer = true;
+
+	else if (!HasItems.IsEmpty())
+		ReturnAnswer = false;
+}
+
+bool UItemsContainerMaster::CheckIfCraftable(TArray<FItemRecipeStruct> RequiredItems)
+{
+
+	return false;
+}
+
+void UItemsContainerMaster::CraftItem(TArray<FItemRecipeStruct>& Required)
+{
+}
+
 TArray<FSimpleItemStruct> UItemsContainerMaster::GetItemQuantities()
 {
 	TArray<FSimpleItemStruct> LocalItemArray;
@@ -325,6 +395,14 @@ int32 UItemsContainerMaster::CalcTotalItemQuantity(const int32 InTemp, const int
 	if (InCurrent + InItemQuan >= InMaxSize)
 		return A;
 
+	return NULL;
+}
+
+int32 UItemsContainerMaster::SetCraftingStructQuantity(const int32 CurrentQuantity, const int32 QuantityToRemove)
+{
+	if (QuantityToRemove - CurrentQuantity <= NULL)
+		return CurrentQuantity - QuantityToRemove;
+	
 	return NULL;
 }
 
