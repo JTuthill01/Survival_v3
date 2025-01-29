@@ -59,6 +59,9 @@ public:
 
 	void CraftItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType);
 
+	TSoftObjectPtr<UItemInfo> FCraftItem(bool& CanCraft, EContainerType& ContainerToAdd, ECraftingType& CraftTableType, TObjectPtr<UItemRecipe> RecipeAsset,
+		EContainerType Type, ECraftingType CraftType) const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -74,6 +77,8 @@ public:
 private:
 #pragma region Private Function
 	TObjectPtr<UItemsContainerMaster> SetContainerType(EContainerType InContainerType) const;
+
+	TObjectPtr<UItemsContainerMaster> SetContainerType(ECraftingType InContainerType) const;
 
 	void CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType);
 
@@ -113,6 +118,7 @@ private:
 
 	bool bIsUsingItem;
 	bool bIsHarvesting;
+	bool bIsCrafting;
 
 	double MontageTimer;
 	double InteractTimer;

@@ -82,4 +82,6 @@ private:
 	int32 CalcTotalItemQuantity(const int32 InTemp, const int32 InItemQuan, const int32 InMaxSize, const int32 InCurrent);
 
 	int32 SetCraftingStructQuantity(const int32 CurrentQuantity, const int32 QuantityToRemove);
+
+	int32 SetCraftItemQuantity(const int32 InQuantityToRemove, const int32 InCurrentQuantity);
 };

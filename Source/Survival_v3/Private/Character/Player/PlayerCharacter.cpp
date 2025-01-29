@@ -13,7 +13,7 @@
 #include "Engine/AssetManager.h"
 
 // Sets default values
-APlayerCharacter::APlayerCharacter() : EquippedState(EEquippableState::ES_Default), bIsUsingItem(false), bIsHarvesting(false), MontageTimer(0.0), InteractTimer(0.25)
+APlayerCharacter::APlayerCharacter() : EquippedState(EEquippableState::ES_Default), bIsUsingItem(false), bIsHarvesting(false), bIsCrafting(false), MontageTimer(0.0), InteractTimer(0.25)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -79,6 +79,42 @@ TObjectPtr<UItemsContainerMaster> APlayerCharacter::SetContainerType(const ECont
 		break;
 		
 	case EContainerType::ECT_Armour:
+		break;
+		
+	default:
+		break;
+	}
+
+	return LocalContainer;
+}
+
+TObjectPtr<UItemsContainerMaster> APlayerCharacter::SetContainerType(ECraftingType InContainerType) const
+{
+	TObjectPtr<UItemsContainerMaster> LocalContainer = nullptr;
+
+	switch (InContainerType)
+	{
+	case ECraftingType::ECT_PlayerInventory:
+
+		LocalContainer = PlayerInventory;
+		
+		break;
+	case ECraftingType::ECT_CookingPot:
+		break;
+		
+	case ECraftingType::ECT_CraftingBench:
+		break;
+		
+	case ECraftingType::ECT_SmeltingForge:
+		break;
+		
+	case ECraftingType::ECT_AdvancedWorkbench:
+		break;
+		
+	case ECraftingType::ECT_StorageBox:
+		break;
+		
+	case ECraftingType::ECT_CropPlot:
 		break;
 		
 	default:
@@ -196,7 +232,7 @@ void APlayerCharacter::GetEndGramsAndItems_Implementation(ECraftingType InType)
 
 void APlayerCharacter::CraftItems(TSoftObjectPtr<UItemRecipe> Recipe, EContainerType ContainerType, ECraftingType CraftType)
 {
-	
+	IPlayerCharacterInterface::CraftItems(Recipe, ContainerType, CraftType);
 }
 
 void APlayerCharacter::OnPlayerMontageComplete()
@@ -306,7 +342,7 @@ void APlayerCharacter::CraftItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EConta
 {
 	if (bool bHasAdminMode = false; !bHasAdminMode)
 	{
-		if (bool bIsCrafting = false; !bIsCrafting)
+		if (bIsCrafting = false; !bIsCrafting)
 		{
 			bIsCrafting = true;
 
@@ -320,11 +356,37 @@ void APlayerCharacter::CraftItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EConta
 	}
 }
 
+TSoftObjectPtr<UItemInfo> APlayerCharacter::FCraftItem(bool& CanCraft, EContainerType& ContainerToAdd, ECraftingType& CraftTableType, TObjectPtr<UItemRecipe> RecipeAsset,
+	EContainerType Type, ECraftingType CraftType) const
+{
+	if (TObjectPtr<UItemsContainerMaster> LocalContainer = SetContainerType(CraftType); IsValid(LocalContainer))
+	{
+		CanCraft = LocalContainer->CheckIfCraftable(RecipeAsset->RequiredItems);
+
+		ContainerToAdd = Type;
+
+		CraftTableType = CraftType;
+
+		return RecipeAsset->ItemAsset;
+	}
+
+	return nullptr;
+}
+
 void APlayerCharacter::CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType)
 {
+	bool LocalCanCraft;
+
+	EContainerType LocalContainerToAdd;
+
+	ECraftingType LocalCraftTableType;
+	
 	if (const TObjectPtr<UItemRecipe> Recipe = Cast<UItemRecipe>(RecipeAsset.Get()); IsValid(Recipe))
 	{
-		
+		FCraftItem(LocalCanCraft, LocalContainerToAdd, LocalCraftTableType, Recipe, Type, CraftType);
+
+		if (!LocalCanCraft)
+			bIsCrafting = false;
 	}
 }
 

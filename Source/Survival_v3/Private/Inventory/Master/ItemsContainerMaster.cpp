@@ -237,12 +237,89 @@ void UItemsContainerMaster::ContainsItem(const TArray<FItemsStruct>& ContainsIte
 
 bool UItemsContainerMaster::CheckIfCraftable(TArray<FItemRecipeStruct> RequiredItems)
 {
+	/* RequiredItems = LocalRequiredItems */
 
-	return false;
+	auto&& LocalItemArray = GetItemQuantities();
+
+	bool CanCraftItem = false;
+
+	if (RequiredItems.Num() == NULL)
+		return false;
+
+	for (int32 i = 0; i < RequiredItems.Num(); ++i)
+	{
+		for (int32 j = 0; j < LocalItemArray.Num(); ++j)
+		{
+			if (LocalItemArray[j].ItemID == RequiredItems[i].ItemID)
+			{
+				if (LocalItemArray[j].ItemQuantity >= RequiredItems[i].ItemQuantity)
+				{
+					CanCraftItem = true;
+
+					break;
+				}
+			}
+		}
+	}
+
+	if (!CanCraftItem)
+		return false;
+	
+	CraftItem(RequiredItems);
+
+	return true;
 }
 
 void UItemsContainerMaster::CraftItem(TArray<FItemRecipeStruct>& Required)
 {
+	/* Required = LocalRequiredItems */
+
+	TArray<FCraftingStruct> LocalItemsArray;
+
+	for (int32 i = 0; i < Items.Num(); ++i)
+	{
+		if (Items[i].ItemID != NULL)
+		{
+			auto&& LocalItems = FCraftingStruct();
+			
+			LocalItems.Index = i;
+			LocalItems.Quantity = Items[i].ItemQuantity;
+			LocalItems.ItemID = Items[i].ItemID;
+
+			LocalItemsArray.Emplace(LocalItems);
+		}
+	}
+
+	for (int32 i = 0; i < Required.Num(); ++i)
+	{
+		/* Required[i].ItemID = LocalID */
+		/* Required[i].ItemQuantity = LocalQuantityToRemove */
+			
+		for (int32 j = 0; j < LocalItemsArray.Num(); ++j)
+		{
+			/* LocalItemsArray[j].Quantity = LocalCurrentQuantity */
+
+			if ( LocalItemsArray[j].ItemID == Required[i].ItemID)
+			{
+				const int32 A = LocalItemsArray[j].Quantity - Required[i].ItemQuantity;
+
+				if (Required[i].ItemQuantity - LocalItemsArray[j].Quantity <= NULL)
+					LocalItemsArray[j].Quantity = A;
+
+				else
+					LocalItemsArray[j].Quantity = NULL;
+
+				UpdateUI(LocalItemsArray[j].Index, Items[LocalItemsArray[j].Index]);
+
+				Items[LocalItemsArray[j].Index].ItemQuantity = A;
+
+				Required[i].ItemQuantity = SetCraftItemQuantity(Required[i].ItemQuantity, LocalItemsArray[j].Quantity);
+
+				if (Required[i].ItemQuantity <= NULL)
+					break;
+			}
+		}
+	}
 }
 
 TArray<FSimpleItemStruct> UItemsContainerMaster::GetItemQuantities()
@@ -402,6 +479,14 @@ int32 UItemsContainerMaster::SetCraftingStructQuantity(const int32 CurrentQuanti
 {
 	if (QuantityToRemove - CurrentQuantity <= NULL)
 		return CurrentQuantity - QuantityToRemove;
+	
+	return NULL;
+}
+
+int32 UItemsContainerMaster::SetCraftItemQuantity(const int32 InQuantityToRemove, const int32 InCurrentQuantity)
+{
+	if (InQuantityToRemove - InCurrentQuantity <= NULL)
+		return InQuantityToRemove - InCurrentQuantity;
 	
 	return NULL;
 }
