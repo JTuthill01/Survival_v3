@@ -13,7 +13,8 @@
 #include "Engine/AssetManager.h"
 
 // Sets default values
-APlayerCharacter::APlayerCharacter() : EquippedState(EEquippableState::ES_Default), bIsUsingItem(false), bIsHarvesting(false), bIsCrafting(false), MontageTimer(0.0), InteractTimer(0.25)
+APlayerCharacter::APlayerCharacter() : EquippedState(EEquippableState::ES_Default), bIsUsingItem(false), bIsHarvesting(false), bIsCrafting(false), MontageTimer(0.0), InteractTimer(0.25),
+	AddCraftedItemTimer(3.0)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -131,7 +132,8 @@ void APlayerCharacter::UpdateItem_Implementation(const EContainerType InType, co
 		IPlayerControllerInterface::Execute_UpdateItemSlot(PC, InType, Index, ItemInfo);
 }
 
-void APlayerCharacter::OnSlotDropped_Implementation(const EContainerType TargetContainer, const EContainerType FromContainer, const int32 FromIndex, const int32 DroppedIndex, EArmourType ArmorType)
+void APlayerCharacter::OnSlotDropped_Implementation(const EContainerType TargetContainer, const EContainerType FromContainer, const int32 FromIndex, const int32 DroppedIndex,
+	EArmourType ArmorType)
 {
 	TObjectPtr<UItemsContainerMaster> LocalContainer;
 
@@ -249,6 +251,12 @@ void APlayerCharacter::OnPlayerMontageComplete()
 	}
 
 	bIsUsingItem = false;
+}
+
+void APlayerCharacter::OnAddCraftedItemComplete(UItemInfo* LoadedItemToAdd, TSoftObjectPtr<UItemInfo> OutInfo, EContainerType LoadedContainer, ECraftingType LoadedCraftingType)
+{
+	GetWorldTimerManager().SetTimer(AddCraftedItemHandle, [&]() { this->AddCraftedItem(LoadedItemToAdd, OutInfo, LoadedContainer, LoadedCraftingType); },
+		AddCraftedItemTimer, false);
 }
 
 void APlayerCharacter::ScanForInteractable()
@@ -375,7 +383,7 @@ TSoftObjectPtr<UItemInfo> APlayerCharacter::FCraftItem(bool& CanCraft, EContaine
 
 void APlayerCharacter::CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType)
 {
-	bool LocalCanCraft;
+	bool bLocalCanCraft;
 
 	EContainerType LocalContainerToAdd;
 
@@ -383,10 +391,68 @@ void APlayerCharacter::CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, ECon
 	
 	if (const TObjectPtr<UItemRecipe> Recipe = Cast<UItemRecipe>(RecipeAsset.Get()); IsValid(Recipe))
 	{
-		FCraftItem(LocalCanCraft, LocalContainerToAdd, LocalCraftTableType, Recipe, Type, CraftType);
+		FCraftItem(bLocalCanCraft, LocalContainerToAdd, LocalCraftTableType, Recipe, Type, CraftType);
 
-		if (!LocalCanCraft)
+		if (!bLocalCanCraft)
 			bIsCrafting = false;
+
+		else if (bLocalCanCraft)
+		{
+			FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
+
+			FSoftObjectPath Path = RecipeAsset.ToSoftObjectPath();
+
+			TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(Path, FStreamableDelegate::CreateUObject(this, &ThisClass::OnAddCraftedItemComplete,
+				Recipe->ItemAsset.Get(), Recipe->ItemAsset , Type, CraftType));
+		}
+	}
+}
+
+void APlayerCharacter::AddCraftedItem(UItemInfo* ItemToAdd, TSoftObjectPtr<UItemInfo> InInfo, EContainerType AddedContainer, ECraftingType AddCraftingType)
+{
+	GetWorldTimerManager().ClearTimer(AddCraftedItemHandle);
+
+	if (auto&& LocalInventory = SetContainerType(AddedContainer); IsValid(LocalInventory))
+	{
+		FItemsStruct LocalItemStruct = FItemsStruct();
+
+		LocalItemStruct.ItemID = ItemToAdd->ItemID;
+		LocalItemStruct.ItemQuantity = 1;
+		LocalItemStruct.ItemAsset = InInfo;
+		LocalItemStruct.CurrentHP = ItemToAdd->ItemCurrentHP;
+		LocalItemStruct.MaxHP = ItemToAdd->ItemMaxHP;
+		LocalItemStruct.CurrentAmmo = ItemToAdd->CurrentAmmo;
+		LocalItemStruct.MaxAmmo = ItemToAdd->MaxAmmo;
+		LocalItemStruct.StackSize = ItemToAdd->StackSize;
+		
+		LocalInventory->AddItem(LocalItemStruct);
+
+		switch (AddCraftingType)
+		{
+		case ECraftingType::ECT_PlayerInventory:
+			break;
+			
+		case ECraftingType::ECT_CookingPot:
+			break;
+			
+		case ECraftingType::ECT_CraftingBench:
+			break;
+			
+		case ECraftingType::ECT_SmeltingForge:
+			break;
+			
+		case ECraftingType::ECT_AdvancedWorkbench:
+			break;
+			
+		case ECraftingType::ECT_StorageBox:
+			break;
+			
+		case ECraftingType::ECT_CropPlot:
+			break;
+
+		default:
+			break;
+		}
 	}
 }
 

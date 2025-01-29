@@ -76,6 +76,9 @@ public:
 
 private:
 #pragma region Private Function
+	UFUNCTION()
+	void AddCraftedItem(UItemInfo* ItemToAdd, TSoftObjectPtr<UItemInfo> InInfo, EContainerType AddedContainer, ECraftingType AddCraftingType);
+	
 	TObjectPtr<UItemsContainerMaster> SetContainerType(EContainerType InContainerType) const;
 
 	TObjectPtr<UItemsContainerMaster> SetContainerType(ECraftingType InContainerType) const;
@@ -83,6 +86,8 @@ private:
 	void CraftedItem(TSoftObjectPtr<UItemRecipe> RecipeAsset, EContainerType Type, ECraftingType CraftType);
 
 	void OnPlayerMontageComplete();
+
+	void OnAddCraftedItemComplete(UItemInfo* LoadedItemToAdd, TSoftObjectPtr<UItemInfo> OutInfo, EContainerType LoadedContainer, ECraftingType LoadedCraftingType);
 
 	void ScanForInteractable();
 
@@ -122,7 +127,11 @@ private:
 
 	double MontageTimer;
 	double InteractTimer;
+	double AddCraftedItemTimer;
+
+	FTimerDelegate AddCraftedItemDelegate;
 
 	FTimerHandle MontageTimerHandle;
 	FTimerHandle InteractTimerHandle;
+	FTimerHandle AddCraftedItemHandle;
 };
